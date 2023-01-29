@@ -22,13 +22,14 @@ import java.util.List;
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private final NotificationTaskService notificationTaskService;
-    private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    private final Logger logger;
 
     @Autowired
     private TelegramBot telegramBot;
 
     public TelegramBotUpdatesListener(NotificationTaskService notificationTaskService) {
         this.notificationTaskService = notificationTaskService;
+        this.logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
     }
 
     @PostConstruct
@@ -43,7 +44,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             if (update.message().text() != null){
                 String message = update.message().text();
                 long chatId = update.message().chat().id();
-                String regexForNewTask = "([\\d.:\s]{16})(\s)([\\W\\d+]+)";
+                final String regexForNewTask = "([\\d.:\s]{16})(\s)([\\W\\d+]+)";
 
                 if (message.equals("/start")) {
                     String username = update.message().chat().firstName();
